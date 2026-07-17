@@ -1,0 +1,13 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "pnpm install && pnpm build --filter=@nouns/bots",
+    "watchPatterns": ["/packages/nouns-bots"]
+  },
+  "deploy": {
+    "startCommand": "pnpm --filter @nouns/bots start",
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  }
+}
