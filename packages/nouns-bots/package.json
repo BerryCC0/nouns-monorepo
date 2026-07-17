@@ -9,21 +9,17 @@
   "type": "module",
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --sourcemap",
-    "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
-    "start": "node dist/index.js",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@redis/client": "^6.1.0",
-    "dotenv": "catalog:",
+    "@netlify/blobs": "^10.7.9",
     "twitter-api-v2": "^1.29.0"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "tsup": "^8.5.0",
-    "tsx": "^4.20.3",
     "vitest": "^3.2.4"
   },
   "engines": {

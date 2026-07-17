@@ -22,10 +22,6 @@ const positiveInteger = (name: string, fallback: number): number => {
 export interface BotConfig {
   subgraphUrl: string;
   subgraphPageSize: number;
-  redisUrl: string;
-  redisKeyPrefix: string;
-  pollIntervalMs: number;
-  lockTtlMs: number;
   xCredentials: {
     appKey: string;
     appSecret: string;
@@ -35,14 +31,15 @@ export interface BotConfig {
 }
 
 export const loadConfig = (): BotConfig => {
-  const pollIntervalMs = positiveInteger('POLL_INTERVAL_MS', 30_000);
+  const subgraphUrl =
+    process.env.NOUNS_SUBGRAPH_URL?.trim() || process.env.VITE_MAINNET_SUBGRAPH?.trim();
+  if (!subgraphUrl) {
+    throw new Error('Missing NOUNS_SUBGRAPH_URL or VITE_MAINNET_SUBGRAPH environment variable');
+  }
+
   return {
-    subgraphUrl: required('NOUNS_SUBGRAPH_URL'),
+    subgraphUrl,
     subgraphPageSize: positiveInteger('SUBGRAPH_PAGE_SIZE', 100),
-    redisUrl: required('REDIS_URL'),
-    redisKeyPrefix: process.env.REDIS_KEY_PREFIX?.trim() || 'nouns:proposal-x',
-    pollIntervalMs,
-    lockTtlMs: Math.max(pollIntervalMs * 2, 300_000),
     xCredentials: {
       appKey: required('X_API_KEY'),
       appSecret: required('X_API_SECRET'),

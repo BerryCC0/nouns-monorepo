@@ -22,8 +22,8 @@ A [ponder.sh](https://github.com/ponder-sh/ponder) based API for all historical 
 
 ### nouns-bots
 
-The [nouns bots](packages/nouns-bots) package contains social automation workers, including the
-onchain proposal-to-X publisher.
+The [nouns bots](packages/nouns-bots) package contains Netlify-scheduled social automation,
+including the onchain proposal-to-X publisher.
 
 ### nouns-subgraph
 

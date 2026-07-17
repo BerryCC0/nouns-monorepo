@@ -20,7 +20,7 @@ Seven main packages with interdependencies:
 4. **nouns-webapp** - React frontend (Vite + Tailwind + i18n)
 5. **nouns-subgraph** - The Graph subgraph manifests
 6. **nouns-api** - Ponder-based API and onchain indexer
-7. **nouns-bots** - Long-running social automation workers
+7. **nouns-bots** - Netlify-scheduled social automation
 
 Build dependencies: webapp depends on assets → contracts → sdk.
 
