@@ -22,6 +22,7 @@ const positiveInteger = (name: string, fallback: number): number => {
 export interface BotConfig {
   subgraphUrl: string;
   subgraphPageSize: number;
+  expectedXUsername: string;
   xCredentials: {
     appKey: string;
     appSecret: string;
@@ -29,6 +30,9 @@ export interface BotConfig {
     accessSecret: string;
   };
 }
+
+export const isProposalXEnabled = (): boolean =>
+  process.env.PROPOSAL_X_ENABLED?.trim().toLowerCase() === 'true';
 
 export const loadConfig = (): BotConfig => {
   const subgraphUrl =
@@ -40,6 +44,7 @@ export const loadConfig = (): BotConfig => {
   return {
     subgraphUrl,
     subgraphPageSize: positiveInteger('SUBGRAPH_PAGE_SIZE', 100),
+    expectedXUsername: required('X_EXPECTED_USERNAME').replace(/^@/, ''),
     xCredentials: {
       appKey: required('X_API_KEY'),
       appSecret: required('X_API_SECRET'),

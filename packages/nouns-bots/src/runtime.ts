@@ -1,5 +1,5 @@
 import { ProposalXBot } from './bot';
-import { loadConfig } from './config';
+import { isProposalXEnabled, loadConfig } from './config';
 import { NetlifyBlobStateStore } from './netlify-blobs';
 import { NounsSubgraphProposalSource } from './subgraph';
 import { XPostPublisher } from './x';
@@ -8,7 +8,12 @@ import { XPostPublisher } from './x';
 // manual invocations without delaying the next scheduled retry after a failed invocation.
 const LOCK_TTL_MS = 4 * 60 * 1000;
 
-export const runProposalXBot = async (): Promise<'completed' | 'locked'> => {
+export const runProposalXBot = async (): Promise<'completed' | 'disabled' | 'locked'> => {
+  if (!isProposalXEnabled()) {
+    console.info('Proposal X bot is disabled');
+    return 'disabled';
+  }
+
   const config = loadConfig();
   const store = new NetlifyBlobStateStore();
   const lockToken = await store.acquireLock(LOCK_TTL_MS);
@@ -20,7 +25,7 @@ export const runProposalXBot = async (): Promise<'completed' | 'locked'> => {
   const bot = new ProposalXBot(
     new NounsSubgraphProposalSource(config.subgraphUrl, config.subgraphPageSize),
     store,
-    new XPostPublisher(config.xCredentials),
+    new XPostPublisher(config.xCredentials, config.expectedXUsername),
     {},
   );
   await bot.tick();

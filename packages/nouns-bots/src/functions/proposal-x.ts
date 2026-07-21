@@ -1,8 +1,7 @@
 import { runProposalXBot } from '../runtime';
 
-export default async (): Promise<Response> => {
-  const result = await runProposalXBot();
-  return new Response(result, { status: 200 });
+export default async (): Promise<void> => {
+  await runProposalXBot();
 };
 
 export const config = {

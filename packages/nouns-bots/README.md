@@ -22,16 +22,20 @@ timeline reads.
 
 ## Setup
 
+Administrators should follow the complete [production setup and operations runbook](ADMIN_SETUP.md).
+
 Create an X developer app with read/write access and OAuth 1.0a user-context credentials for
 the official account. Add the credentials below as server-only environment variables on the
 Nouns Netlify site:
 
 Required variables:
 
+- `PROPOSAL_X_ENABLED` (`true` activates posting; every other value keeps it disabled)
 - `X_API_KEY`
 - `X_API_SECRET`
 - `X_ACCESS_TOKEN`
 - `X_ACCESS_TOKEN_SECRET`
+- `X_EXPECTED_USERNAME` (without `@`; posting fails safely if the token belongs to another user)
 
 The function reuses the site's existing `VITE_MAINNET_SUBGRAPH` value. An optional
 `NOUNS_SUBGRAPH_URL` can override it without changing the webapp. The X user token must belong
@@ -54,4 +58,6 @@ pnpm --filter @nouns/bots lint
 
 The root `netlify.toml` registers `src/functions/proposal-x.ts` as a scheduled function. It is
 deployed automatically with the existing nouns.wtf site and runs only on published production
-deploys. The first invocation initializes its cursor without posting historical proposals.
+deploys. Posting is disabled by default. After administrators enable it and create a new
+production deploy, the first enabled invocation initializes its cursor without posting
+historical proposals.

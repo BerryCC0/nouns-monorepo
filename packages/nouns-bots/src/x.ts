@@ -13,11 +13,15 @@ export class XPostPublisher implements PostPublisher {
   private readonly client: TwitterApiReadWrite;
   private userId: string | null = null;
 
-  constructor(credentials: XCredentials) {
+  constructor(
+    credentials: XCredentials,
+    private readonly expectedUsername: string,
+  ) {
     this.client = new TwitterApi(credentials).readWrite;
   }
 
   async createPost(text: string): Promise<ExistingPost> {
+    await this.getUserId();
     const response = await this.client.v2.tweet(text);
     return { id: response.data.id };
   }
@@ -35,6 +39,11 @@ export class XPostPublisher implements PostPublisher {
   private async getUserId(): Promise<string> {
     if (this.userId !== null) return this.userId;
     const response = await this.client.v2.me();
+    if (response.data.username.toLowerCase() !== this.expectedUsername.toLowerCase()) {
+      throw new Error(
+        `X credentials belong to @${response.data.username}, expected @${this.expectedUsername}`,
+      );
+    }
     this.userId = response.data.id;
     return this.userId;
   }
